@@ -9,6 +9,8 @@ import (
 	"pay-with-transfer/shared/logger"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
 )
 
 func Execute() {
@@ -17,7 +19,20 @@ func Execute() {
 		logger.Error("failed to load config data")
 		os.Exit(1)
 	}
+
 	server := gin.Default()
+	db, err := sqlx.Open(config.DATABASE_DRIVER, cfg.Database.GetURI())
+	if err != nil {
+		logger.WithError(err).Error("failed to connect to database")
+		os.Exit(1)
+	}
+
+	if err := db.Ping(); err != nil {
+		logger.WithError(err).Error("failed to connect to database")
+		os.Exit(1)
+	}
+
+	logger.Info("connected to database")
 
 	api1.Init(server)
 

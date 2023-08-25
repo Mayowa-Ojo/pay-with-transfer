@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"os"
 	"strings"
 
@@ -13,13 +14,38 @@ const (
 	DEVELOPMENT_ENV = "dev"
 )
 
+const DATABASE_DRIVER = "postgres"
+
 type Config struct {
-	App AppConfig
+	App      AppConfig
+	Database DatabaseConfig
 }
 
 type AppConfig struct {
 	Environment string `envconfig:"ENV"`
 	Port        string `envconfig:"PORT"`
+}
+
+type DatabaseConfig struct {
+	Host     string `envconfig:"PAY_DB_HOST"`
+	Port     int    `envconfig:"PAY_DB_PORT"`
+	User     string `envconfig:"PAY_DB_USER"`
+	Password string `envconfig:"PAY_DB_PASSWORD"`
+	Name     string `envconfig:"PAY_DB_NAME"`
+	SSLMode  string `envconfig:"PAY_DB_SSL_MODE"`
+	Schema   string `envconfig:"PAY_DB_SCHEMA"`
+}
+
+func (d *DatabaseConfig) GetURI() string {
+	return fmt.Sprintf("%s://%s:%s@%s:%d/%s?sslmode=%s",
+		DATABASE_DRIVER,
+		d.User,
+		d.Password,
+		d.Host,
+		d.Port,
+		d.Name,
+		d.SSLMode,
+	)
 }
 
 func Load() (*Config, error) {

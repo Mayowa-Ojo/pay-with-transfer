@@ -39,6 +39,6 @@ func Warn(msg interface{}, keyvals ...interface{}) {
 	std.Warn(msg, keyvals...)
 }
 
-func WithError(err error) {
-	std.With(LOG_FIELD_ERROR, err)
+func WithError(err error) *log.Logger {
+	return std.With(LOG_FIELD_ERROR, err)
 }

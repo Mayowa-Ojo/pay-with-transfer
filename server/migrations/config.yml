@@ -1,0 +1,11 @@
+development:
+  dialect: postgres
+  datasource: host=${PAY_DB_HOST} port=${PAY_DB_PORT} dbname=${PAY_DB_NAME} user=${PAY_DB_USER} password=${PAY_DB_PASSWORD} sslmode=${PAY_DB_SSL_MODE}
+  dir: migrations
+  table: migrations
+
+production:
+  dialect: postgres
+  datasource: dbname=myapp sslmode=disable
+  dir: migrations
+  table: migrations

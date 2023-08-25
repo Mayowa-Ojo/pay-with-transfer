@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  pay-postgres:
+    container_name: pay-postgres
+    image: arm64v8/postgres
+    network_mode: bridge
+    ports:
+      - "5436:5432"
+    restart: always
+    volumes:
+      - database-data:/var/lib/postgres
+    environment:
+      - POSTGRES_DB=pay-test
+      - POSTGRES_USER=pay-user
+      - POSTGRES_PASSWORD=pay-password
+  pay-redis:
+    container_name: pay-redis
+    image: redis
+    network_mode: bridge
+    ports:
+      - "6389:6379"
+volumes:
+  database-data:
