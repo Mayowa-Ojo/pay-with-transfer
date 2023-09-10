@@ -6,7 +6,6 @@ import (
 	"pay-with-transfer/shared/logger"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 )
 
 type HealthFacade struct {
@@ -20,9 +19,7 @@ func NewHealthFacade(svc healthcheck.HealthService) *HealthFacade {
 }
 
 func (f *HealthFacade) GetHealthStatus(c *gin.Context) {
-	traceID := uuid.NewString()
-	// ctx := context.WithValue(c, logger.LOG_FIELD_TRACE_ID, traceID)
-	logger := logger.With(logger.LOG_FIELD_FUNCTION_NAME, "GetHealthStatus").With(logger.LOG_FIELD_TRACE_ID, traceID)
+	logger.WithTrace(c).With(logger.LOG_FIELD_FUNCTION_NAME, "GetHealthStatus")
 
 	logger.Info("checking health status...")
 

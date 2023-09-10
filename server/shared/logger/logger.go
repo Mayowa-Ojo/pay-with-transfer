@@ -1,10 +1,12 @@
 package logger
 
 import (
+	"context"
 	"os"
 	"time"
 
 	"github.com/charmbracelet/log"
+	"github.com/google/uuid"
 )
 
 const (
@@ -41,4 +43,13 @@ func Warn(msg interface{}, keyvals ...interface{}) {
 
 func WithError(err error) *log.Logger {
 	return std.With(LOG_FIELD_ERROR, err)
+}
+
+func WithTrace(ctx context.Context) *log.Logger {
+	v := ctx.Value(LOG_FIELD_TRACE_ID)
+	id, ok := v.(string)
+	if ok {
+		return std.With(LOG_FIELD_TRACE_ID, id)
+	}
+	return std.With(LOG_FIELD_TRACE_ID, uuid.NewString())
 }

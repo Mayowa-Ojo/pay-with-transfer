@@ -34,7 +34,7 @@ func Execute() {
 
 	logger.Info("connected to database")
 
-	api1.Init(server)
+	api1.Init(server, db)
 
 	server.NoRoute(func(ctx *gin.Context) {
 		ctx.Status(http.StatusNotFound)
