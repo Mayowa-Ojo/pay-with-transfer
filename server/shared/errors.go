@@ -7,5 +7,6 @@ func (e ErrorMessage) String() string {
 }
 
 const (
-	ErrorMissingParam = ErrorMessage("invalid/missing param in request path")
+	ErrorMissingParam   = ErrorMessage("invalid/missing param in request path")
+	ErrorInvalidRequest = ErrorMessage("invalid/missing field in request payload")
 )

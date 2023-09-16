@@ -14,6 +14,7 @@ type Store interface {
 
 type AccountStore interface {
 	GetAccountByID(ctx context.Context, id string) (*Account, error)
+	CreateAccountHolder(ctx context.Context, ah AccountHolder) error
 }
 
 type DataStore struct {

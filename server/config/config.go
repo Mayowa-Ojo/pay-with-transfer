@@ -17,8 +17,9 @@ const (
 const DATABASE_DRIVER = "postgres"
 
 type Config struct {
-	App      AppConfig
-	Database DatabaseConfig
+	App       AppConfig
+	Database  DatabaseConfig
+	Providers ProviderConfig
 }
 
 type AppConfig struct {
@@ -46,6 +47,15 @@ func (d *DatabaseConfig) GetURI() string {
 		d.Name,
 		d.SSLMode,
 	)
+}
+
+type ProviderConfig struct {
+	Paystack PaystackConfig
+}
+
+type PaystackConfig struct {
+	BaseURL   string `envconfig:"BASE_URL"`
+	SecretKey string `envconfig:"SECRET_KEY"`
 }
 
 func Load() (*Config, error) {

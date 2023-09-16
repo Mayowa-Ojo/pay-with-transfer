@@ -1,6 +1,9 @@
 package store
 
 import (
+	"pay-with-transfer/shared"
+	"time"
+
 	"github.com/google/uuid"
 )
 
@@ -21,11 +24,21 @@ type Account struct {
 type AccountHolder struct {
 	ID           uuid.UUID `db:"id" json:"id"`
 	FirstName    string    `db:"first_name" json:"first_name"`
-	LastNumber   string    `db:"last_name" json:"last_name"`
+	LastName     string    `db:"last_name" json:"last_name"`
 	Email        string    `db:"email" json:"email"`
 	Phone        string    `db:"phone" json:"phone"`
 	ProviderID   string    `db:"provider_id" json:"provider_id"`
 	ProviderCode string    `db:"provider_code" json:"provider_code"`
-	CreatedAt    string    `db:"created_at" json:"created_at"`
-	UpdatedAt    string    `db:"updated_at" json:"updated_at"`
+	CreatedAt    time.Time `db:"created_at" json:"created_at"`
+	UpdatedAt    time.Time `db:"updated_at" json:"updated_at"`
+}
+
+func (r *AccountHolder) WithDefaults() {
+	r.ID = uuid.New()
+	r.FirstName = shared.DEFAULT_ACCOUNT_HOLDER_FIRST_NAME
+	r.Email = shared.GeneratePayEmail()
+	r.Phone = shared.GeneratePayPhoneNumber()
+	r.LastName = shared.DEFAULT_ACCOUNT_HOLDER_LAST_NAME
+	r.CreatedAt = time.Now()
+	r.UpdatedAt = time.Now()
 }

@@ -3,8 +3,25 @@ package shared
 import (
 	"bytes"
 	"fmt"
+	"strconv"
 	"strings"
+	"time"
+
+	"github.com/google/uuid"
 )
+
+const (
+	DEFAULT_ACCOUNT_HOLDER_FIRST_NAME = "PAY"
+	DEFAULT_ACCOUNT_HOLDER_LAST_NAME  = "CHECKOUT"
+)
+
+func GeneratePayEmail() string {
+	return fmt.Sprintf("checkout.%s@pay.com", uuid.NewString()[:4])
+}
+
+func GeneratePayPhoneNumber() string {
+	return fmt.Sprintf("+23480%s", strconv.Itoa(int(time.Now().UnixMilli()))[5:])
+}
 
 func BindReplacer(query string, args ...interface{}) string {
 	startAt := 1

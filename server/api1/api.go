@@ -22,4 +22,5 @@ func Init(router *gin.Engine, db *sqlx.DB) {
 
 	v1.GET("/health/check", healthFacade.GetHealthStatus)
 	v1.GET("/accounts/:id", accountFacade.FetchSingleAccount)
+	v1.POST("/accounts/pool/generate", accountFacade.GeneratePoolAccounts)
 }

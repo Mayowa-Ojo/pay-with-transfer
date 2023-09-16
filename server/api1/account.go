@@ -25,18 +25,39 @@ func (f *AccountFacade) FetchSingleAccount(c *gin.Context) {
 	accountID := c.Param("id")
 	if accountID == "" {
 		logger.Error("missing param [id] in request path")
-		obj := shared.GetResponse(shared.ResponseCodeError, shared.ErrorMissingParam.String(), nil)
-		c.JSON(http.StatusBadRequest, obj)
+		resp := shared.GetResponse(shared.ResponseCodeError, shared.ErrorMissingParam.String(), nil)
+		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
 
 	account, err := f.svc.FetchSingleAccount(c, accountID)
 	if err != nil {
 		logger.With(paylog.LOG_FIELD_ERROR, err).Error("failed to fetch single account")
-		obj := shared.GetResponse(shared.ResponseCodeError, err.Error(), nil)
-		c.JSON(http.StatusPreconditionFailed, obj)
+		resp := shared.GetResponse(shared.ResponseCodeError, err.Error(), nil)
+		c.JSON(http.StatusPreconditionFailed, resp)
 		return
 	}
 
 	c.JSON(http.StatusOK, shared.GetResponse(shared.ResponseCodeOk, "success", account))
+}
+
+func (f *AccountFacade) GeneratePoolAccounts(c *gin.Context) {
+	logger := paylog.WithTrace(c).With(paylog.LOG_FIELD_FUNCTION_NAME, "GeneratePoolAccounts")
+
+	var dto accounts.GeneratePoolAccountsDTO
+	if err := c.ShouldBindJSON(&dto); err != nil {
+		logger.Error("failed to bind request body")
+		resp := shared.GetResponse(shared.ResponseCodeError, shared.ErrorInvalidRequest.String(), nil)
+		c.JSON(http.StatusBadRequest, resp)
+		return
+	}
+
+	if err := f.svc.GeneratePoolAccounts(c, dto.Count); err != nil {
+		logger.With(paylog.LOG_FIELD_ERROR, err).Error("failed to generate pool accounts")
+		resp := shared.GetResponse(shared.ResponseCodeError, err.Error(), nil)
+		c.JSON(http.StatusPreconditionFailed, resp)
+		return
+	}
+
+	c.JSON(http.StatusOK, shared.GetResponse(shared.ResponseCodeOk, "success", nil))
 }
