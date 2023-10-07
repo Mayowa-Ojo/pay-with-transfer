@@ -61,3 +61,25 @@ func (f *AccountFacade) GeneratePoolAccounts(c *gin.Context) {
 
 	c.JSON(http.StatusOK, shared.GetResponse(shared.ResponseCodeOk, "success", nil))
 }
+
+func (f *AccountFacade) CreateEphemeralAccount(c *gin.Context) {
+	logger := paylog.WithTrace(c).With(paylog.LOG_FIELD_FUNCTION_NAME, "CreateEphemeralAccount")
+
+	var dto accounts.CreateEphemeralAccountDTO
+	if err := c.ShouldBindJSON(&dto); err != nil {
+		logger.Error("failed to bind request body")
+		resp := shared.GetResponse(shared.ResponseCodeError, shared.ErrorInvalidRequest.String(), nil)
+		c.JSON(http.StatusBadRequest, resp)
+		return
+	}
+
+	resp, err := f.svc.CreateEphemeralAccount(c, dto)
+	if err != nil {
+		logger.With(paylog.LOG_FIELD_ERROR, err).Error("failed to create ephemeral account")
+		resp := shared.GetResponse(shared.ResponseCodeError, err.Error(), nil)
+		c.JSON(http.StatusPreconditionFailed, resp)
+		return
+	}
+
+	c.JSON(http.StatusOK, shared.GetResponse(shared.ResponseCodeOk, "success", resp))
+}

@@ -3,6 +3,8 @@ package shared
 import (
 	"bytes"
 	"fmt"
+	"math"
+	"math/big"
 	"strconv"
 	"strings"
 	"time"
@@ -21,6 +23,10 @@ func GeneratePayEmail() string {
 
 func GeneratePayPhoneNumber() string {
 	return fmt.Sprintf("+23480%s", strconv.Itoa(int(time.Now().UnixMilli()))[5:])
+}
+
+func GenerateAccountNumber() string {
+	return strconv.Itoa(int(time.Now().UnixMilli()))[3:]
 }
 
 func BindReplacer(query string, args ...interface{}) string {
@@ -55,4 +61,10 @@ func BindReplacer(query string, args ...interface{}) string {
 	}
 
 	return paramBuf.String()
+}
+
+func ToBaseUnitAmount(amount float64) int64 {
+	a, _, _ := big.ParseFloat(fmt.Sprintf("%v", math.Round(amount*100)), 10, 0, big.ToNearestEven)
+	d, _ := a.Int(new(big.Int))
+	return d.Int64()
 }

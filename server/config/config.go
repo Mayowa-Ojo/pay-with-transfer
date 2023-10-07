@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/joho/godotenv"
 	"github.com/kelseyhightower/envconfig"
@@ -19,12 +20,14 @@ const DATABASE_DRIVER = "postgres"
 type Config struct {
 	App       AppConfig
 	Database  DatabaseConfig
+	Redis     RedisConfig
 	Providers ProviderConfig
 }
 
 type AppConfig struct {
-	Environment string `envconfig:"ENV"`
-	Port        string `envconfig:"PORT"`
+	Environment         string        `envconfig:"ENV"`
+	Port                string        `envconfig:"PORT"`
+	EphemeralAccountTTL time.Duration `envconfig:"EPHEMERAL_ACCOUNT_TTL"`
 }
 
 type DatabaseConfig struct {
@@ -47,6 +50,15 @@ func (d *DatabaseConfig) GetURI() string {
 		d.Name,
 		d.SSLMode,
 	)
+}
+
+type RedisConfig struct {
+	Host       string `envconfig:"PAY_REDIS_HOST"`
+	Port       string `envconfig:"PAY_REDIS_PORT"`
+	Password   string `envconfig:"PAY_REDIS_PASSWORD"`
+	Username   string `envconfig:"PAY_REDIS_USERNAME"`
+	Namespace  string `envconfig:"PAY_REDIS_NAMESPACE"`
+	TLSEnabled bool   `envconfig:"PAY_REDIS_TLS_ENABLED"`
 }
 
 type ProviderConfig struct {
