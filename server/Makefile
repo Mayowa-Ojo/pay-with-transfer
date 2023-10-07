@@ -14,7 +14,7 @@ migrate-up: # migrate database to most recent version
 	set -a && source .env && set +a && \
 	sql-migrate up --config $(MIGRATIONS_DIR)/$(MIGRATIONS_CONFIG)
 
-migrate-dry: # migrate database to most recent version
+migrate-dry: # print migrations without applying
 	set -a && source .env && set +a && \
 	sql-migrate up -dryrun --config $(MIGRATIONS_DIR)/$(MIGRATIONS_CONFIG)
 
