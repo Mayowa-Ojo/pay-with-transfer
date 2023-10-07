@@ -3,6 +3,8 @@ package accounts
 import (
 	"context"
 	"database/sql"
+	"pay-with-transfer/cache"
+	"pay-with-transfer/config"
 	"pay-with-transfer/store"
 	"testing"
 
@@ -13,10 +15,12 @@ import (
 
 func TestFetchSingleAccount(t *testing.T) {
 	ctx := context.Background()
+	cfg := config.Config{}
 	mockCtrl := gomock.NewController(t)
 	mockStore := store.NewMockStore(mockCtrl)
+	mockCache := cache.NewMockCache(mockCtrl)
 
-	h := New(mockStore)
+	h := New(mockStore, mockCache, cfg)
 
 	t.Run("account-exists", func(t *testing.T) {
 		accountID := uuid.New()
