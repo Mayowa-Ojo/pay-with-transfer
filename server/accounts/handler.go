@@ -49,6 +49,31 @@ func (h *Handler) FetchSingleAccount(ctx context.Context, accountID string) (*st
 	return account, nil
 }
 
+func (h *Handler) FetchSingleEphemeralAccount(ctx context.Context, accountID string) (*store.EphemeralAccount, error) {
+	logger := paylog.WithTrace(ctx).With(paylog.LOG_FIELD_FUNCTION_NAME, "FetchSingleEphemeralAccount")
+
+	logger.Infof("fetching ephemeral account with id: %s", accountID)
+
+	ea, err := h.store.GetEphemeralAccountByID(ctx, accountID)
+	if err != nil {
+		logger.With(paylog.LOG_FIELD_ERROR, err).Error("failed to find ephemeral account: %s", accountID)
+		return nil, err
+	}
+
+	account, err := h.store.GetAccountByID(ctx, ea.AccountID.String())
+	if err != nil {
+		logger.With(paylog.LOG_FIELD_ERROR, err).Error("failed to find account: %s", accountID)
+		return nil, err
+	}
+
+	ea.AccountName = account.AccountName
+	ea.BankName = account.BankName.String
+	ea.AccountNumber = account.AccountNumber
+	ea.PaymentAmount = float64(ea.Amount / 100)
+
+	return ea, nil
+}
+
 func (h *Handler) GeneratePoolAccounts(ctx context.Context, count int) error {
 	logger := paylog.WithTrace(ctx).With(paylog.LOG_FIELD_FUNCTION_NAME, "FetchSingleAccount")
 
@@ -165,6 +190,7 @@ func (h *Handler) createEphemeralAccountWithBackoff(ctx context.Context, dto Cre
 	ea.AccountName = account.AccountName
 	ea.BankName = account.BankName.String
 	ea.AccountNumber = account.AccountNumber
+	ea.PaymentAmount = dto.Amount
 
 	//update account dormant status
 	account.IsDormant = false

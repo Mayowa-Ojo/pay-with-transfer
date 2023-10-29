@@ -24,6 +24,7 @@ func Init(router *gin.Engine, db *sqlx.DB, cache paycache.Cache, cfg *config.Con
 
 	v1.GET("/health/check", healthFacade.GetHealthStatus)
 	v1.GET("/accounts/:id", accountFacade.FetchSingleAccount)
+	v1.GET("/accounts/:id/ephemeral", accountFacade.FetchSingleEphemeralAccount)
 	v1.POST("/accounts/pool/generate", accountFacade.GeneratePoolAccounts)
 	v1.POST("/accounts/ephemeral", accountFacade.CreateEphemeralAccount)
 }

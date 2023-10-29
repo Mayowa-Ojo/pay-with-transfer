@@ -28,6 +28,26 @@ func (d *DataStore) GetAccountByID(ctx context.Context, id string) (*Account, er
 	return &account, nil
 }
 
+func (d *DataStore) GetEphemeralAccountByID(ctx context.Context, id string) (*EphemeralAccount, error) {
+	rows, err := d.db.Queryx(shared.BindReplacer(`SELECT * FROM service.ephemeral_accounts WHERE id = ? LIMIT 1`), id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	account := EphemeralAccount{}
+	for rows.Next() {
+		err = rows.StructScan(&account)
+		if err != nil {
+			return nil, err
+		}
+	}
+	if account.IsEmpty() {
+		return nil, sql.ErrNoRows
+	}
+	return &account, nil
+}
+
 func (d *DataStore) UpdateAccount(ctx context.Context, ac Account) error {
 	if ac.ProviderResponse.String == "" {
 		ac.ProviderResponse = null.NewString("{}", true)

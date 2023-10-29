@@ -107,6 +107,21 @@ func (mr *MockStoreMockRecorder) GetAccountByID(ctx, id interface{}) *gomock.Cal
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAccountByID", reflect.TypeOf((*MockStore)(nil).GetAccountByID), ctx, id)
 }
 
+// GetEphemeralAccountByID mocks base method.
+func (m *MockStore) GetEphemeralAccountByID(ctx context.Context, id string) (*EphemeralAccount, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetEphemeralAccountByID", ctx, id)
+	ret0, _ := ret[0].(*EphemeralAccount)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetEphemeralAccountByID indicates an expected call of GetEphemeralAccountByID.
+func (mr *MockStoreMockRecorder) GetEphemeralAccountByID(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetEphemeralAccountByID", reflect.TypeOf((*MockStore)(nil).GetEphemeralAccountByID), ctx, id)
+}
+
 // UpdateAccount mocks base method.
 func (m *MockStore) UpdateAccount(ctx context.Context, ac Account) error {
 	m.ctrl.T.Helper()
@@ -215,6 +230,21 @@ func (m *MockAccountStore) GetAccountByID(ctx context.Context, id string) (*Acco
 func (mr *MockAccountStoreMockRecorder) GetAccountByID(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAccountByID", reflect.TypeOf((*MockAccountStore)(nil).GetAccountByID), ctx, id)
+}
+
+// GetEphemeralAccountByID mocks base method.
+func (m *MockAccountStore) GetEphemeralAccountByID(ctx context.Context, id string) (*EphemeralAccount, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetEphemeralAccountByID", ctx, id)
+	ret0, _ := ret[0].(*EphemeralAccount)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetEphemeralAccountByID indicates an expected call of GetEphemeralAccountByID.
+func (mr *MockAccountStoreMockRecorder) GetEphemeralAccountByID(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetEphemeralAccountByID", reflect.TypeOf((*MockAccountStore)(nil).GetEphemeralAccountByID), ctx, id)
 }
 
 // UpdateAccount mocks base method.

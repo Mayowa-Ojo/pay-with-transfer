@@ -69,19 +69,20 @@ func (eas EphemeralAccountStatus) String() string {
 type EphemeralAccount struct {
 	ID        uuid.UUID              `db:"id" json:"id"`
 	AccountID uuid.UUID              `db:"account_id" json:"-"`
-	Amount    int64                  `db:"amount" json:"amount"` //amount is in base units
+	Amount    int64                  `db:"amount" json:"-"` //amount is in base units
 	Status    EphemeralAccountStatus `db:"status" json:"-"`
 	ExpiresAt time.Time              `db:"expires_at" json:"expires_at"`
 	CreatedAt time.Time              `db:"created_at" json:"created_at"`
 	UpdatedAt time.Time              `db:"updated_at" json:"updated_at"`
 
-	AccountName   string `json:"account_name"`
-	AccountNumber string `json:"account_number"`
-	BankName      string `json:"bank_name"`
+	AccountName   string  `json:"account_name"`
+	AccountNumber string  `json:"account_number"`
+	BankName      string  `json:"bank_name"`
+	PaymentAmount float64 `json:"payment_amount"`
 }
 
 func (r *EphemeralAccount) IsEmpty() bool {
-	var empty Account
+	var empty EphemeralAccount
 	b, _ := json.Marshal(r)
 	bb, _ := json.Marshal(empty)
 	return string(b) == string(bb)

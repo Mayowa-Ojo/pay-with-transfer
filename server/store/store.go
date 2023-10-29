@@ -14,6 +14,7 @@ type Store interface {
 
 type AccountStore interface {
 	GetAccountByID(ctx context.Context, id string) (*Account, error)
+	GetEphemeralAccountByID(ctx context.Context, id string) (*EphemeralAccount, error)
 	UpdateAccount(ctx context.Context, ac Account) error
 	CreateAccountHolder(ctx context.Context, ah AccountHolder) error
 	FindDormantAccount(ctx context.Context) (*Account, error)

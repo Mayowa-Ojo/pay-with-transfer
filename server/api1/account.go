@@ -5,6 +5,7 @@ import (
 	"pay-with-transfer/accounts"
 	"pay-with-transfer/shared"
 	paylog "pay-with-transfer/shared/logger"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -41,6 +42,30 @@ func (f *AccountFacade) FetchSingleAccount(c *gin.Context) {
 	c.JSON(http.StatusOK, shared.GetResponse(shared.ResponseCodeOk, "success", account))
 }
 
+func (f *AccountFacade) FetchSingleEphemeralAccount(c *gin.Context) {
+	logger := paylog.WithTrace(c).With(paylog.LOG_FIELD_FUNCTION_NAME, "FetchSingleEphemeralAccount")
+
+	accountID := c.Param("id")
+	if accountID == "" {
+		logger.Error("missing param [id] in request path")
+		resp := shared.GetResponse(shared.ResponseCodeError, shared.ErrorMissingParam.String(), nil)
+		c.JSON(http.StatusBadRequest, resp)
+		return
+	}
+
+	account, err := f.svc.FetchSingleEphemeralAccount(c, accountID)
+	if err != nil {
+		logger.With(paylog.LOG_FIELD_ERROR, err).Error("failed to fetch ephemeral account")
+		resp := shared.GetResponse(shared.ResponseCodeError, err.Error(), nil)
+		c.JSON(http.StatusPreconditionFailed, resp)
+		return
+	}
+
+	time.Sleep(time.Millisecond * 700)
+
+	c.JSON(http.StatusOK, shared.GetResponse(shared.ResponseCodeOk, "success", account))
+}
+
 func (f *AccountFacade) GeneratePoolAccounts(c *gin.Context) {
 	logger := paylog.WithTrace(c).With(paylog.LOG_FIELD_FUNCTION_NAME, "GeneratePoolAccounts")
 
@@ -72,6 +97,8 @@ func (f *AccountFacade) CreateEphemeralAccount(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
+
+	time.Sleep(time.Millisecond * 3000)
 
 	resp, err := f.svc.CreateEphemeralAccount(c, dto)
 	if err != nil {
