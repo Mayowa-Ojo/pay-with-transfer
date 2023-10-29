@@ -24,3 +24,4 @@ ALTER TABLE service.accounts DROP COLUMN IF EXISTS provider_response;
 ALTER TABLE service.accounts DROP COLUMN IF EXISTS is_dormant;
 
 DROP TABLE IF EXISTS service.ephemeral_accounts;
+DROP TYPE IF EXISTS service.ephemeral_account_status;

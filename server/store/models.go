@@ -79,6 +79,8 @@ type EphemeralAccount struct {
 	AccountNumber string  `json:"account_number"`
 	BankName      string  `json:"bank_name"`
 	PaymentAmount float64 `json:"payment_amount"`
+	Provider      string  `json:"-"`
+	TransactionID string  `json:"transaction_id"`
 }
 
 func (r *EphemeralAccount) IsEmpty() bool {
@@ -91,6 +93,49 @@ func (r *EphemeralAccount) IsEmpty() bool {
 func (r *EphemeralAccount) WithDefaults() {
 	r.ID = uuid.New()
 	r.Status = EphemeralAccountActive
+	r.CreatedAt = time.Now()
+	r.UpdatedAt = time.Now()
+}
+
+type TransactionStatus string
+
+const (
+	TransactionSuccessful = TransactionStatus("SUCCESSFUL")
+	TransactionPending    = TransactionStatus("PENDING")
+	TransactionFailed     = TransactionStatus("FAILED")
+)
+
+func (eas TransactionStatus) String() string {
+	return string(eas)
+}
+
+type Transaction struct {
+	ID                 uuid.UUID         `db:"id" json:"id"`
+	AccountID          uuid.UUID         `db:"account_id" json:"account_id"`
+	EphemeralAccountID uuid.UUID         `db:"ephemeral_account_id" json:"ephemeral_account_id"`
+	ExternalID         null.String       `db:"external_id" json:"external_id"`
+	Amount             int64             `db:"amount" json:"amount"`
+	Currency           string            `db:"currency" json:"currency"`
+	AccountName        null.String       `db:"account_name" json:"account_name"`
+	AccountNumber      null.String       `db:"account_number" json:"account_number"`
+	BankName           null.String       `db:"bank_name" json:"bank_name"`
+	Status             TransactionStatus `db:"status" json:"status"`
+	Provider           null.String       `db:"provider" json:"provider"`
+	ProviderResponse   null.String       `db:"provider_response" json:"provider_response"`
+	CreatedAt          time.Time         `db:"created_at" json:"created_at"`
+	UpdatedAt          time.Time         `db:"updated_at" json:"updated_at"`
+}
+
+func (r *Transaction) IsEmpty() bool {
+	var empty Transaction
+	b, _ := json.Marshal(r)
+	bb, _ := json.Marshal(empty)
+	return string(b) == string(bb)
+}
+
+func (r *Transaction) WithDefaults() {
+	r.ID = uuid.New()
+	r.Status = TransactionPending
 	r.CreatedAt = time.Now()
 	r.UpdatedAt = time.Now()
 }

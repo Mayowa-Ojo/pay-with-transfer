@@ -20,6 +20,9 @@ type AccountStore interface {
 	FindDormantAccount(ctx context.Context) (*Account, error)
 	FindEphemeralAccountByAccountID(ctx context.Context, accountID string) (*EphemeralAccount, error)
 	CreateEphemeralAccount(ctx context.Context, ea EphemeralAccount) error
+	GetTransactionByID(ctx context.Context, id string) (*Transaction, error)
+	CreateTransaction(ctx context.Context, t Transaction) error
+	UpdateTransaction(ctx context.Context, t Transaction) error
 }
 
 type DataStore struct {

@@ -62,6 +62,20 @@ func (mr *MockStoreMockRecorder) CreateEphemeralAccount(ctx, ea interface{}) *go
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateEphemeralAccount", reflect.TypeOf((*MockStore)(nil).CreateEphemeralAccount), ctx, ea)
 }
 
+// CreateTransaction mocks base method.
+func (m *MockStore) CreateTransaction(ctx context.Context, t Transaction) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateTransaction", ctx, t)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CreateTransaction indicates an expected call of CreateTransaction.
+func (mr *MockStoreMockRecorder) CreateTransaction(ctx, t interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTransaction", reflect.TypeOf((*MockStore)(nil).CreateTransaction), ctx, t)
+}
+
 // FindDormantAccount mocks base method.
 func (m *MockStore) FindDormantAccount(ctx context.Context) (*Account, error) {
 	m.ctrl.T.Helper()
@@ -122,6 +136,21 @@ func (mr *MockStoreMockRecorder) GetEphemeralAccountByID(ctx, id interface{}) *g
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetEphemeralAccountByID", reflect.TypeOf((*MockStore)(nil).GetEphemeralAccountByID), ctx, id)
 }
 
+// GetTransactionByID mocks base method.
+func (m *MockStore) GetTransactionByID(ctx context.Context, id string) (*Transaction, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetTransactionByID", ctx, id)
+	ret0, _ := ret[0].(*Transaction)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetTransactionByID indicates an expected call of GetTransactionByID.
+func (mr *MockStoreMockRecorder) GetTransactionByID(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTransactionByID", reflect.TypeOf((*MockStore)(nil).GetTransactionByID), ctx, id)
+}
+
 // UpdateAccount mocks base method.
 func (m *MockStore) UpdateAccount(ctx context.Context, ac Account) error {
 	m.ctrl.T.Helper()
@@ -134,6 +163,20 @@ func (m *MockStore) UpdateAccount(ctx context.Context, ac Account) error {
 func (mr *MockStoreMockRecorder) UpdateAccount(ctx, ac interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateAccount", reflect.TypeOf((*MockStore)(nil).UpdateAccount), ctx, ac)
+}
+
+// UpdateTransaction mocks base method.
+func (m *MockStore) UpdateTransaction(ctx context.Context, t Transaction) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateTransaction", ctx, t)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateTransaction indicates an expected call of UpdateTransaction.
+func (mr *MockStoreMockRecorder) UpdateTransaction(ctx, t interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateTransaction", reflect.TypeOf((*MockStore)(nil).UpdateTransaction), ctx, t)
 }
 
 // MockAccountStore is a mock of AccountStore interface.
@@ -185,6 +228,20 @@ func (m *MockAccountStore) CreateEphemeralAccount(ctx context.Context, ea Epheme
 func (mr *MockAccountStoreMockRecorder) CreateEphemeralAccount(ctx, ea interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateEphemeralAccount", reflect.TypeOf((*MockAccountStore)(nil).CreateEphemeralAccount), ctx, ea)
+}
+
+// CreateTransaction mocks base method.
+func (m *MockAccountStore) CreateTransaction(ctx context.Context, t Transaction) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateTransaction", ctx, t)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CreateTransaction indicates an expected call of CreateTransaction.
+func (mr *MockAccountStoreMockRecorder) CreateTransaction(ctx, t interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTransaction", reflect.TypeOf((*MockAccountStore)(nil).CreateTransaction), ctx, t)
 }
 
 // FindDormantAccount mocks base method.
@@ -247,6 +304,21 @@ func (mr *MockAccountStoreMockRecorder) GetEphemeralAccountByID(ctx, id interfac
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetEphemeralAccountByID", reflect.TypeOf((*MockAccountStore)(nil).GetEphemeralAccountByID), ctx, id)
 }
 
+// GetTransactionByID mocks base method.
+func (m *MockAccountStore) GetTransactionByID(ctx context.Context, id string) (*Transaction, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetTransactionByID", ctx, id)
+	ret0, _ := ret[0].(*Transaction)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetTransactionByID indicates an expected call of GetTransactionByID.
+func (mr *MockAccountStoreMockRecorder) GetTransactionByID(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTransactionByID", reflect.TypeOf((*MockAccountStore)(nil).GetTransactionByID), ctx, id)
+}
+
 // UpdateAccount mocks base method.
 func (m *MockAccountStore) UpdateAccount(ctx context.Context, ac Account) error {
 	m.ctrl.T.Helper()
@@ -259,4 +331,18 @@ func (m *MockAccountStore) UpdateAccount(ctx context.Context, ac Account) error 
 func (mr *MockAccountStoreMockRecorder) UpdateAccount(ctx, ac interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateAccount", reflect.TypeOf((*MockAccountStore)(nil).UpdateAccount), ctx, ac)
+}
+
+// UpdateTransaction mocks base method.
+func (m *MockAccountStore) UpdateTransaction(ctx context.Context, t Transaction) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateTransaction", ctx, t)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateTransaction indicates an expected call of UpdateTransaction.
+func (mr *MockAccountStoreMockRecorder) UpdateTransaction(ctx, t interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateTransaction", reflect.TypeOf((*MockAccountStore)(nil).UpdateTransaction), ctx, t)
 }

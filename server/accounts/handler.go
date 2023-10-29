@@ -141,6 +141,24 @@ func (h *Handler) CreateEphemeralAccount(ctx context.Context, dto CreateEphemera
 		return nil, err
 	}
 
+	txn := store.Transaction{}
+	txn.WithDefaults()
+	txn.EphemeralAccountID = account.ID
+	txn.AccountID = account.AccountID
+	txn.Amount = account.Amount
+	txn.Currency = paystack.CURRENCY_NGN
+	txn.AccountName = null.StringFrom(account.AccountName)
+	txn.BankName = null.StringFrom(account.BankName)
+	txn.AccountNumber = null.StringFrom(account.AccountNumber)
+	txn.Provider = null.StringFrom(account.Provider)
+
+	if err = h.store.CreateTransaction(ctx, txn); err != nil {
+		logger.With(paylog.LOG_FIELD_ERROR, err).Error("failed to create transaction")
+		return nil, err
+	}
+
+	account.TransactionID = txn.ID.String()
+
 	return account, nil
 }
 
@@ -191,6 +209,7 @@ func (h *Handler) createEphemeralAccountWithBackoff(ctx context.Context, dto Cre
 	ea.BankName = account.BankName.String
 	ea.AccountNumber = account.AccountNumber
 	ea.PaymentAmount = dto.Amount
+	ea.Provider = account.Provider
 
 	//update account dormant status
 	account.IsDormant = false
