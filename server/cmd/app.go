@@ -7,8 +7,8 @@ import (
 	"os"
 	"pay-with-transfer/api1"
 	"pay-with-transfer/cache"
-	paycache "pay-with-transfer/cache"
 	"pay-with-transfer/config"
+	"pay-with-transfer/services/temporal"
 	"pay-with-transfer/shared/logger"
 
 	"github.com/gin-contrib/cors"
@@ -39,7 +39,7 @@ func Execute() {
 
 	logger.Info("connected to database ✅")
 
-	cache := paycache.New(ctx, cfg.Redis.Host, cfg.Redis.Port,
+	cache := cache.New(ctx, cfg.Redis.Host, cfg.Redis.Port,
 		cache.WithNamespace(cfg.Redis.Namespace),
 	)
 
@@ -49,6 +49,11 @@ func Execute() {
 	}
 
 	logger.Info("connected to redis ✅")
+
+	tc := temporal.NewClient()
+	defer tc.Close()
+
+	temporal.Init(ctx, tc)
 
 	server.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:5173"},

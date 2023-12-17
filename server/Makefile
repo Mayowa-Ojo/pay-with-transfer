@@ -1,7 +1,16 @@
-.PHONY: run gogen new-migration setup install-migrate
+.PHONY: run gogen new-migration setup install-migrate new-migration migrate-up migrate-down run-worker temporal-start temporal-ns-create
 
 run: # run the server
 	ENV=dev go run -race -v main.go
+
+run-worker:
+	ENV=dev go run services/temporal/worker/main.go
+
+temporal-start:
+	temporal server start-dev
+
+temporal-ns-create:
+	temporal operator namespace create pay-with-transfer
 
 MIGRATIONS_DIR=migrations
 MIGRATIONS_CONFIG=config.yml
