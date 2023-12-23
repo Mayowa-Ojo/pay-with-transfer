@@ -151,6 +151,21 @@ func (mr *MockStoreMockRecorder) GetEphemeralAccountByID(ctx, id interface{}) *g
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetEphemeralAccountByID", reflect.TypeOf((*MockStore)(nil).GetEphemeralAccountByID), ctx, id)
 }
 
+// GetTransactionByEphemeralAccountID mocks base method.
+func (m *MockStore) GetTransactionByEphemeralAccountID(ctx context.Context, eaID string) (*Transaction, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetTransactionByEphemeralAccountID", ctx, eaID)
+	ret0, _ := ret[0].(*Transaction)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetTransactionByEphemeralAccountID indicates an expected call of GetTransactionByEphemeralAccountID.
+func (mr *MockStoreMockRecorder) GetTransactionByEphemeralAccountID(ctx, eaID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTransactionByEphemeralAccountID", reflect.TypeOf((*MockStore)(nil).GetTransactionByEphemeralAccountID), ctx, eaID)
+}
+
 // GetTransactionByID mocks base method.
 func (m *MockStore) GetTransactionByID(ctx context.Context, id string) (*Transaction, error) {
 	m.ctrl.T.Helper()
@@ -346,6 +361,21 @@ func (m *MockAccountStore) GetEphemeralAccountByID(ctx context.Context, id strin
 func (mr *MockAccountStoreMockRecorder) GetEphemeralAccountByID(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetEphemeralAccountByID", reflect.TypeOf((*MockAccountStore)(nil).GetEphemeralAccountByID), ctx, id)
+}
+
+// GetTransactionByEphemeralAccountID mocks base method.
+func (m *MockAccountStore) GetTransactionByEphemeralAccountID(ctx context.Context, eaID string) (*Transaction, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetTransactionByEphemeralAccountID", ctx, eaID)
+	ret0, _ := ret[0].(*Transaction)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetTransactionByEphemeralAccountID indicates an expected call of GetTransactionByEphemeralAccountID.
+func (mr *MockAccountStoreMockRecorder) GetTransactionByEphemeralAccountID(ctx, eaID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTransactionByEphemeralAccountID", reflect.TypeOf((*MockAccountStore)(nil).GetTransactionByEphemeralAccountID), ctx, eaID)
 }
 
 // GetTransactionByID mocks base method.
