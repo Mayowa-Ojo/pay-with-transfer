@@ -33,7 +33,10 @@ const useGeneratePaymentAccount = () => {
             const data = resp.data;
             navigate({
                to: "/payment/account",
-               search: { id: (data as PaymentAccount).id },
+               search: {
+                  id: (data as PaymentAccount).id,
+                  txn: (data as PaymentAccount).transaction_id,
+               },
             });
          },
       }
