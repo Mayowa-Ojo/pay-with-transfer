@@ -41,3 +41,28 @@ func (a *AccountActivity) UpdateEphemeralAccount(ctx context.Context, param Upda
 	}
 	return nil
 }
+
+func (a *AccountActivity) UpdateTransaction(ctx context.Context, param UpdateTransactionParam) error {
+	logger := activity.GetLogger(ctx)
+
+	err := a.store.UpdateTransaction(ctx, *param.Transaction)
+	if err != nil {
+		logger.Error("error while updating transaction", "error", err.Error())
+		return err
+	}
+	return nil
+}
+
+func (a *AccountActivity) GetEphemeralAccountTransaction(ctx context.Context, param GetEphemeralAccountTransactionParam) (*GetEphemeralAccountTransactionResponse, error) {
+	logger := activity.GetLogger(ctx)
+
+	transaction, err := a.store.GetTransactionByEphemeralAccountID(ctx, param.AccountID)
+	if err != nil {
+		logger.Error("error while fetching ephemeral account transaction", "error", err.Error())
+		return nil, err
+	}
+
+	return &GetEphemeralAccountTransactionResponse{
+		Transaction: transaction,
+	}, nil
+}

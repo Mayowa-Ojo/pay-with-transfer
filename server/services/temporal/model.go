@@ -18,3 +18,15 @@ type GetActiveAccountsResponse struct {
 type UpdateEphemeralAccountParam struct {
 	Account store.EphemeralAccount
 }
+
+type UpdateTransactionParam struct {
+	Transaction *store.Transaction
+}
+
+type GetEphemeralAccountTransactionParam struct {
+	AccountID string
+}
+
+type GetEphemeralAccountTransactionResponse struct {
+	Transaction *store.Transaction
+}

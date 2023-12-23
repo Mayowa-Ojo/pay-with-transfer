@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"pay-with-transfer/shared"
+	"time"
 
 	"github.com/volatiletech/null/v8"
 )
@@ -49,6 +50,8 @@ func (d *DataStore) GetEphemeralAccountByID(ctx context.Context, id string) (*Ep
 }
 
 func (d *DataStore) UpdateAccount(ctx context.Context, ac Account) error {
+	ac.UpdatedAt = time.Now()
+
 	if ac.ProviderResponse.String == "" {
 		ac.ProviderResponse = null.NewString("{}", true)
 	}
@@ -121,6 +124,27 @@ func (d *DataStore) FindDormantAccount(ctx context.Context) (*Account, error) {
 	return &account, nil
 }
 
+func (d *DataStore) FindActiveEphemeralAccounts(ctx context.Context, limit int) ([]*EphemeralAccount, error) {
+	query := `SELECT * FROM service.ephemeral_accounts WHERE status::varchar = 'ACTIVE' AND expires_at < ? LIMIT ?`
+	rows, err := d.db.Queryx(shared.BindReplacer(query), time.Now(), limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	accounts := []*EphemeralAccount{}
+	for rows.Next() {
+		a := &EphemeralAccount{}
+		err = rows.StructScan(a)
+		if err != nil {
+			return nil, err
+		}
+		accounts = append(accounts, a)
+	}
+
+	return accounts, nil
+}
+
 func (d *DataStore) FindEphemeralAccountByAccountID(ctx context.Context, accountID string) (*EphemeralAccount, error) {
 	query := `SELECT * FROM service.ephemeral_accounts WHERE account_id = ? ORDER BY created_at DESC LIMIT 1`
 	rows, err := d.db.Queryx(shared.BindReplacer(query), accountID)
@@ -154,6 +178,28 @@ func (d *DataStore) CreateEphemeralAccount(ctx context.Context, ea EphemeralAcco
 		ea.ExpiresAt,
 		ea.CreatedAt,
 		ea.UpdatedAt,
+	)
+	if err != nil {
+		return err
+	}
+
+	result.RowsAffected()
+	return nil
+}
+
+func (d *DataStore) UpdateEphemeralAccount(ctx context.Context, ea EphemeralAccount) error {
+	ea.UpdatedAt = time.Now()
+
+	stmt := `UPDATE service.ephemeral_accounts SET 
+	account_id = ?, amount = ?, status = ?, expires_at = ?, updated_at = ?
+	WHERE id = ?`
+	result, err := d.db.ExecContext(ctx, shared.BindReplacer(stmt),
+		ea.AccountID.String(),
+		ea.Amount,
+		ea.Status.String(),
+		ea.ExpiresAt,
+		ea.UpdatedAt,
+		ea.ID.String(),
 	)
 	if err != nil {
 		return err

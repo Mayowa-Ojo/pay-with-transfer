@@ -28,6 +28,26 @@ func (d *DataStore) GetTransactionByID(ctx context.Context, id string) (*Transac
 	return &txn, nil
 }
 
+func (d *DataStore) GetTransactionByEphemeralAccountID(ctx context.Context, eaID string) (*Transaction, error) {
+	rows, err := d.db.Queryx(shared.BindReplacer(`SELECT * FROM service.transactions WHERE ephemeral_account_id = ?`), eaID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	txn := Transaction{}
+	for rows.Next() {
+		err = rows.StructScan(&txn)
+		if err != nil {
+			return nil, err
+		}
+	}
+	if txn.IsEmpty() {
+		return nil, sql.ErrNoRows
+	}
+	return &txn, nil
+}
+
 func (d *DataStore) CreateTransaction(ctx context.Context, t Transaction) error {
 	if t.ProviderResponse.String == "" {
 		t.ProviderResponse = null.NewString("{}", true)
@@ -81,6 +101,7 @@ func (d *DataStore) UpdateTransaction(ctx context.Context, t Transaction) error 
 		t.ProviderResponse.String,
 		t.CreatedAt,
 		t.UpdatedAt,
+		t.ID.String(),
 	)
 	if err != nil {
 		return err

@@ -35,7 +35,28 @@ func HandleAccountResetWorkflow(ctx workflow.Context) error {
 		}).Get(ctx, nil)
 		if err != nil {
 			workflow.GetLogger(ctx).Error("failed to execute activity", "Error", err)
-			return err
+			continue
+		}
+
+		//check if transaction is still pending
+		var resp GetEphemeralAccountTransactionResponse
+		err = workflow.ExecuteActivity(ctx, a.GetEphemeralAccountTransaction, GetEphemeralAccountTransactionParam{
+			AccountID: v.ID.String(),
+		}).Get(ctx, &resp)
+		if err != nil {
+			workflow.GetLogger(ctx).Error("failed to execute activity", "Error", err)
+			continue
+		}
+
+		if resp.Transaction.Status == store.TransactionPending {
+			resp.Transaction.Status = store.TransactionCanceled
+			err = workflow.ExecuteActivity(ctx, a.UpdateTransaction, UpdateTransactionParam{
+				Transaction: resp.Transaction,
+			}).Get(ctx, nil)
+			if err != nil {
+				workflow.GetLogger(ctx).Error("failed to execute activity", "Error", err)
+				continue
+			}
 		}
 	}
 

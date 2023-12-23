@@ -21,8 +21,8 @@ type Account struct {
 	IsActive         bool        `db:"is_active" json:"is_active"`
 	IsDormant        bool        `db:"is_dormant" json:"is_dormant"`
 	ProviderResponse null.String `db:"provider_response" json:"provider_response"`
-	CreatedAt        string      `db:"created_at" json:"created_at"`
-	UpdatedAt        string      `db:"updated_at" json:"updated_at"`
+	CreatedAt        time.Time   `db:"created_at" json:"created_at"`
+	UpdatedAt        time.Time   `db:"updated_at" json:"updated_at"`
 }
 
 func (r *Account) IsEmpty() bool {
@@ -68,9 +68,9 @@ func (eas EphemeralAccountStatus) String() string {
 
 type EphemeralAccount struct {
 	ID        uuid.UUID              `db:"id" json:"id"`
-	AccountID uuid.UUID              `db:"account_id" json:"-"`
-	Amount    int64                  `db:"amount" json:"-"` //amount is in base units
-	Status    EphemeralAccountStatus `db:"status" json:"-"`
+	AccountID uuid.UUID              `db:"account_id" json:"account_id"`
+	Amount    int64                  `db:"amount" json:"amount"` //amount is in base units
+	Status    EphemeralAccountStatus `db:"status" json:"status"`
 	ExpiresAt time.Time              `db:"expires_at" json:"expires_at"`
 	CreatedAt time.Time              `db:"created_at" json:"created_at"`
 	UpdatedAt time.Time              `db:"updated_at" json:"updated_at"`
@@ -103,6 +103,7 @@ const (
 	TransactionSuccessful = TransactionStatus("SUCCESSFUL")
 	TransactionPending    = TransactionStatus("PENDING")
 	TransactionFailed     = TransactionStatus("FAILED")
+	TransactionCanceled   = TransactionStatus("CANCELED")
 )
 
 func (eas TransactionStatus) String() string {

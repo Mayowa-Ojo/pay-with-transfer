@@ -18,11 +18,14 @@ type AccountStore interface {
 	UpdateAccount(ctx context.Context, ac Account) error
 	CreateAccountHolder(ctx context.Context, ah AccountHolder) error
 	FindDormantAccount(ctx context.Context) (*Account, error)
+	FindActiveEphemeralAccounts(ctx context.Context, limit int) ([]*EphemeralAccount, error)
 	FindEphemeralAccountByAccountID(ctx context.Context, accountID string) (*EphemeralAccount, error)
 	CreateEphemeralAccount(ctx context.Context, ea EphemeralAccount) error
+	UpdateEphemeralAccount(ctx context.Context, ea EphemeralAccount) error
 	GetTransactionByID(ctx context.Context, id string) (*Transaction, error)
 	CreateTransaction(ctx context.Context, t Transaction) error
 	UpdateTransaction(ctx context.Context, t Transaction) error
+	GetTransactionByEphemeralAccountID(ctx context.Context, eaID string) (*Transaction, error)
 }
 
 type DataStore struct {
