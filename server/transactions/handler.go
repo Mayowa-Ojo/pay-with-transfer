@@ -6,6 +6,7 @@ import (
 	"pay-with-transfer/config"
 	paylog "pay-with-transfer/shared/logger"
 	"pay-with-transfer/store"
+	"time"
 )
 
 type Handler struct {
@@ -31,6 +32,15 @@ func (h *Handler) FetchSingleTransaction(ctx context.Context, transactionID stri
 	if err != nil {
 		logger.With(paylog.LOG_FIELD_ERROR, err).Error("failed to find transaction: %s", transactionID)
 		return nil, err
+	}
+
+	//This is for demo purposes
+	if transaction.Status == store.TransactionPending && time.Since(transaction.CreatedAt) >= time.Minute*15 {
+		transaction.Status = store.TransactionSuccessful
+		err := h.store.UpdateTransaction(ctx, *transaction)
+		if err != nil {
+			logger.With(paylog.LOG_FIELD_ERROR, err).Error("failed to update transaction: %s", transactionID)
+		}
 	}
 
 	return transaction, nil

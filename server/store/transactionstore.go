@@ -63,7 +63,7 @@ func (d *DataStore) UpdateTransaction(ctx context.Context, t Transaction) error 
 	if t.ProviderResponse.String == "" {
 		t.ProviderResponse = null.NewString("{}", true)
 	}
-	stmt := `UPDATE service.transaction SET
+	stmt := `UPDATE service.transactions SET
 	account_id = ?, ephemeral_account_id = ?, external_id = ?, amount = ?, currency = ?, account_name = ?,
 	account_number = ?, bank_name = ?, status = ?, provider = ?, provider_response = ?, created_at = ?, updated_at = ?
 	WHERE id = ?`
