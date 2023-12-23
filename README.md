@@ -1,6 +1,9 @@
-# Pay With Transfer™
+# Pay With Transfer
 
 > This is an attempt to implment a simple version of the 'Bank Transfer' payment option you'll see in Paystack sdks and Interswitch's Quickteller.
+
+![](https://res.cloudinary.com/devmayor/image/upload/v1703369164/u0aykovwfpv7ow97xshu.png)
+![](https://res.cloudinary.com/devmayor/image/upload/v1703369163/nxkbwf8tvtetfddci2we.png)
 
 ### How it works
 
